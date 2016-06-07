@@ -8,12 +8,13 @@
 require_once 'app/Mage.php';
 
 //set the store id that is going to receive the data
-Mage::app()->setCurrentStore(3);
+$store_id = 1;
+Mage::app()->setCurrentStore($store_id);
 
 //path/name of your file
 $file = 'url_redirect.csv';
 
-echo "Running url redirect import for Florida Cooling...\n";
+echo "Running url redirect import...\n";
 
 if (($handle = fopen($file, "r")) !== FALSE) {
 
@@ -23,7 +24,7 @@ if (($handle = fopen($file, "r")) !== FALSE) {
         $load_item = Mage::getSingleton('enterprise_urlrewrite/redirect')
             ->getCollection()
             ->addFieldToFilter('identifier', $data[0])
-            ->addFieldToFilter('store_id', '3');
+            ->addFieldToFilter('store_id', $store_id);
 
         if(count($load_item)>0){
             echo "Redirect from " . $data[0] . " to " . $data[1] . " already exists.\n";
@@ -34,7 +35,7 @@ if (($handle = fopen($file, "r")) !== FALSE) {
                     ->setRedirectId(null)
                     ->setTargetPath($data[1])
                     ->setIdentifier($data[0])
-                    ->setStoreId(3)
+                    ->setStoreId($store_id)
                     ->setOptions('RP')
                     ->setDescription('This description is optional');
 
